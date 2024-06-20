@@ -32,6 +32,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.model.rememberNavigatorScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -40,10 +41,11 @@ import com.telefonica.kmpappscatalog.presentation.model.AppsCatalogUiState
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
-class AppsCatalog(val viewModel: AppsCatalogScreenViewModel) : Screen {
+class AppsCatalog : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val viewModel = navigator.rememberNavigatorScreenModel { AppsCatalogScreenViewModel() }
         val uiState by viewModel.uiState.collectAsState()
         AppsCatalogScreen(
             uiState,

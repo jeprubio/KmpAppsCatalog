@@ -42,8 +42,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
 
             implementation(libs.voyager.navigator)
-            api(libs.moko.mvvm.core)
-            api(libs.moko.mvvm.compose)
+            implementation(libs.voyager.screenmodel)
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
 
