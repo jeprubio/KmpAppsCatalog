@@ -46,6 +46,8 @@ kotlin {
             api(libs.moko.mvvm.compose)
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
+
+            implementation(libs.kamel)
         }
     }
 }

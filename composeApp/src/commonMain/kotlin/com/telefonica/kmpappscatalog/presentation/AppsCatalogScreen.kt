@@ -1,7 +1,6 @@
 package com.telefonica.kmpappscatalog.presentation
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -28,7 +28,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -37,6 +37,8 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.telefonica.kmpappscatalog.domain.LauncherApp
 import com.telefonica.kmpappscatalog.presentation.model.AppsCatalogUiState
+import io.kamel.image.KamelImage
+import io.kamel.image.asyncPainterResource
 
 class AppsCatalog(val viewModel: AppsCatalogScreenViewModel) : Screen {
     @Composable
@@ -103,7 +105,11 @@ private fun AppCard(
         modifier = Modifier.fillMaxWidth(),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Box(modifier = Modifier.size(40.dp).background(Color.Blue))
+            KamelImage(
+                resource = asyncPainterResource(data = app.icon),
+                contentDescription = app.name,
+                modifier = Modifier.size(40.dp).clip(RoundedCornerShape(8.dp)),
+            )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 app.name,
