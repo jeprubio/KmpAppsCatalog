@@ -96,7 +96,7 @@ private fun AppCard(
     onAppClicked: (LauncherApp) -> Unit
 ) {
     Card(
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface,
         ),

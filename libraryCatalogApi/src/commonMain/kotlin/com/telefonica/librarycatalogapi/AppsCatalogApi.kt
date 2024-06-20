@@ -1,10 +1,8 @@
 package com.telefonica.librarycatalogapi
 
-import com.telefonica.librarycatalogapi.models.Product
 import com.telefonica.librarycatalogapi.models.ProductsResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.call.receive
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
