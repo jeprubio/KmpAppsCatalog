@@ -17,11 +17,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MediumTopAppBar
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -38,6 +34,10 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.telefonica.kmpappscatalog.domain.LauncherApp
 import com.telefonica.kmpappscatalog.presentation.model.AppsCatalogUiState
+import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveCircularProgressIndicator
+import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveScaffold
+import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveTopAppBar
+import io.github.alexzhirkevich.cupertino.adaptive.ExperimentalAdaptiveApi
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
@@ -56,15 +56,15 @@ class AppsCatalog : Screen {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalAdaptiveApi::class)
 @Composable
 internal fun AppsCatalogScreen(
     uiState: AppsCatalogUiState,
     onAppClicked: (LauncherApp) -> Unit,
 ) {
-    Scaffold(
+    AdaptiveScaffold(
         topBar = {
-            MediumTopAppBar(
+            AdaptiveTopAppBar(
                 title = { Text("Apps Catalog") },
             )
         }
@@ -86,7 +86,7 @@ internal fun AppsCatalogScreen(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.fillMaxSize(),
             ) {
-                CircularProgressIndicator()
+                AdaptiveCircularProgressIndicator()
             }
         }
     }

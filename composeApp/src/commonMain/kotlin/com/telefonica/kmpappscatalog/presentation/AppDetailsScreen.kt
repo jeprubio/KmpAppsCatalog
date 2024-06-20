@@ -13,7 +13,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,6 +29,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.telefonica.kmpappscatalog.domain.LauncherApp
 import com.telefonica.kmpappscatalog.openUrl
+import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveButton
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
@@ -109,7 +109,7 @@ fun BoxScope.Footer(app: LauncherApp, modifier: Modifier = Modifier) {
             .fillMaxWidth()
     ) {
         HorizontalDivider()
-        Button(
+        AdaptiveButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),

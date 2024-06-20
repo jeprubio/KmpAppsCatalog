@@ -47,6 +47,7 @@ kotlin {
             implementation(libs.koin.compose)
 
             implementation(libs.kamel)
+            implementation(libs.cupertino)
         }
     }
 }

@@ -20,6 +20,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.telefonica.kmpappscatalog.determineTheme
+import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveTheme
+import io.github.alexzhirkevich.cupertino.adaptive.Theme
+import io.github.alexzhirkevich.cupertino.theme.CupertinoTheme
 
 private val LightColorScheme = lightColorScheme(
     primary = md_theme_light_primary,
@@ -106,6 +110,7 @@ internal val LocalThemeIsDark = compositionLocalOf { mutableStateOf(true) }
 @Composable
 internal fun AppTheme(
     systemAppearance: (isLight: Boolean) -> Unit,
+    theme: Theme = determineTheme(),
     content: @Composable() () -> Unit
 ) {
     val systemIsDark = isSystemInDarkTheme()
@@ -117,13 +122,29 @@ internal fun AppTheme(
         LaunchedEffect(isDark) {
             systemAppearance(!isDark)
         }
-        MaterialTheme(
-            colorScheme = if (!isDark) LightColorScheme else DarkColorScheme,
-            typography = AppTypography,
-            shapes = AppShapes,
-            content = {
-                Surface(content = content)
-            }
+        AdaptiveTheme(
+            material = {
+                MaterialTheme(
+                    colorScheme = if (!isDark) LightColorScheme else DarkColorScheme,
+                    typography = AppTypography,
+                    shapes = AppShapes,
+                    content = {
+                        Surface(content = content)
+                    }
+                )
+            },
+            cupertino = {
+                CupertinoTheme(
+                    colorScheme = if (isDark) {
+                        io.github.alexzhirkevich.cupertino.theme.darkColorScheme()
+                    } else {
+                        io.github.alexzhirkevich.cupertino.theme.lightColorScheme()
+                    },
+                    content = it
+                )
+            },
+            target = theme,
+            content = content
         )
     }
 }
