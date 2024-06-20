@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.serialization)
     id("maven-publish")
     alias(libs.plugins.kmmBridge)
+    alias(libs.plugins.skie)
 }
 
 group = "com.rumosoft.catalogapi"
@@ -90,5 +91,4 @@ kmmbridge {
 
     mavenPublishArtifacts()
     spm()
-    //cocoapods("git@github.com:touchlab/PublicPodSpecs.git")
 }
