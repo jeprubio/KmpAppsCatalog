@@ -4,11 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -31,6 +29,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.telefonica.kmpappscatalog.domain.LauncherApp
+import com.telefonica.kmpappscatalog.openUrl
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 
@@ -56,20 +55,9 @@ private fun AppDetailsScreen(app: LauncherApp, back: () -> Unit) {
                 .fillMaxWidth()
         ) {
             Heading(app)
-            Text(
-                app.name,
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .padding(top = 36.dp, bottom = 8.dp)
-            )
-            Text(
-                text = app.description,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(16.dp)
-            )
+            Body(app)
         }
-        Footer()
+        Footer(app)
         CloseButton(
             back = back,
             modifier = Modifier.align(Alignment.TopEnd).padding(16.dp)
@@ -95,6 +83,42 @@ private fun Heading(app: LauncherApp) {
 
         AppIcon(app)
     }
+}
+
+@Composable
+fun Body(app: LauncherApp) {
+    Text(
+        app.name,
+        style = MaterialTheme.typography.titleLarge,
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .padding(top = 36.dp, bottom = 8.dp)
+    )
+    Text(
+        text = app.description,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.padding(16.dp)
+    )
+}
+
+@Composable
+fun BoxScope.Footer(app: LauncherApp, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .align(Alignment.BottomCenter)
+            .fillMaxWidth()
+    ) {
+        HorizontalDivider()
+        Button(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            onClick = { openUrl(app.androidInstallUrl, app.iosInstallUrl) }
+        ) {
+            Text("Install")
+        }
+    }
+
 }
 
 @Composable
@@ -127,24 +151,4 @@ private fun CloseButton(back: () -> Unit, modifier: Modifier = Modifier) {
             contentDescription = "Close",
         )
     }
-}
-
-@Composable
-fun BoxScope.Footer(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier
-            .align(Alignment.BottomCenter)
-            .fillMaxWidth()
-    ) {
-        HorizontalDivider()
-        Button(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            onClick = { /* TODO */ }
-        ) {
-            Text("Install")
-        }
-    }
-
 }
