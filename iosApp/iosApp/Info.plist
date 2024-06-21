@@ -46,5 +46,18 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>LSApplicationQueriesSchemes</key>
+    <array>
+      <string>blau-de</string>
+      <string>latch</string>
+      <string>movistar-es</string>
+      <string>o2-de</string>
+      <string>o2-es</string>
+      <string>o2-uk</string>
+      <string>smartwifi</string>
+      <string>tu-wallet-app</string>
+      <string>vivo-br</string>
+      <string>whatsappsim-b2p</string>
+    </array>
 </dict>
 </plist>

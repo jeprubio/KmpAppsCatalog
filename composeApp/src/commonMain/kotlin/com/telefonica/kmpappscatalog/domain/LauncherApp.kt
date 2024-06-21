@@ -9,4 +9,6 @@ data class LauncherApp(
     val description: String,
     val androidInstallUrl: String,
     val iosInstallUrl: String,
+    val androidPackage: String,
+    val iosScheme: String,
 ): JavaSerializable

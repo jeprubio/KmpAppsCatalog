@@ -1,9 +1,9 @@
-package com.telefonica.kmpappscatalog.presentation
+package com.telefonica.kmpappscatalog.presentation.appsCatalog
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.telefonica.kmpappscatalog.domain.GetLauncherAppsUseCase
-import com.telefonica.kmpappscatalog.presentation.model.AppsCatalogUiState
+import com.telefonica.kmpappscatalog.presentation.appsCatalog.model.AppsCatalogUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

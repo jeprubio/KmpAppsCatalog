@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.Navigator
 import com.telefonica.kmpappscatalog.di.appModule
+import com.telefonica.kmpappscatalog.presentation.appsCatalog.AppsCatalog
 import com.telefonica.kmpappscatalog.presentation.theme.AppTheme
 import org.koin.core.context.startKoin
 

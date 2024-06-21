@@ -1,4 +1,4 @@
-package com.telefonica.kmpappscatalog.presentation
+package com.telefonica.kmpappscatalog.presentation.appsCatalog
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -33,7 +33,8 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.telefonica.kmpappscatalog.domain.LauncherApp
-import com.telefonica.kmpappscatalog.presentation.model.AppsCatalogUiState
+import com.telefonica.kmpappscatalog.presentation.appsDetails.AppsDetails
+import com.telefonica.kmpappscatalog.presentation.appsCatalog.model.AppsCatalogUiState
 import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveCircularProgressIndicator
 import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveScaffold
 import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveTopAppBar

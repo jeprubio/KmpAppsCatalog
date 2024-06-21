@@ -1,4 +1,4 @@
-package com.telefonica.kmpappscatalog.presentation.model
+package com.telefonica.kmpappscatalog.presentation.appsCatalog.model
 
 import com.telefonica.kmpappscatalog.domain.LauncherApp
 
