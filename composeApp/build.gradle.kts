@@ -43,9 +43,11 @@ kotlin {
 
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.screenmodel)
+            implementation(libs.voyager.transitions)
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
 
+            implementation(libs.napier)
             implementation(libs.kamel)
             implementation(libs.cupertino)
         }

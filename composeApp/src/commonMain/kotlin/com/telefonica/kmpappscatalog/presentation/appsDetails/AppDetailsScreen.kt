@@ -31,7 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.model.rememberNavigatorScreenModel
+import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -52,7 +52,7 @@ class AppsDetails(private val app: LauncherApp) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = navigator.rememberNavigatorScreenModel { AppsDetailsScreenViewModel() }
+        val viewModel = rememberScreenModel { AppsDetailsScreenViewModel() }
         val uiState by viewModel.uiState.collectAsState()
         LaunchedEffect(app) {
             viewModel.checkAppInstalled(app)
@@ -169,7 +169,9 @@ fun BoxScope.Footer(
         ) {
             when (uiState.isAppInstalled) {
                 IsAppInstalled.Loading -> {
-                    AdaptiveCircularProgressIndicator()
+                    AdaptiveCircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
                 }
 
                 is IsAppInstalled.Error -> {

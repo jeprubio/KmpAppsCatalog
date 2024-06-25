@@ -4,6 +4,15 @@ import android.app.Application
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import io.github.aakira.napier.DebugAntilog
+import io.github.aakira.napier.Napier
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+
+const val POLLING_INTERVAL = 1_000L
 
 class AndroidApp : Application() {
     companion object {
@@ -12,6 +21,7 @@ class AndroidApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        Napier.base(DebugAntilog())
         INSTANCE = this
     }
 }
@@ -26,7 +36,14 @@ internal actual fun openUrl(androidUrl: String?, iosUrl: String?) {
     AndroidApp.INSTANCE.startActivity(intent)
 }
 
-internal actual fun isAppInstalled(androidPackage: String?, iosScheme: String?): Boolean {
+internal actual fun appInstalled(androidPackage: String?, iosScheme: String?): Flow<Boolean> = flow {
+    while (true) {
+        emit(isAppInstalled(androidPackage))
+        delay(POLLING_INTERVAL)
+    }
+}.flowOn(Dispatchers.IO)
+
+private fun isAppInstalled(androidPackage: String?): Boolean {
     if (androidPackage == null) return false
 
     return try {

@@ -1,6 +1,8 @@
 package com.telefonica.kmpappscatalog
 
-internal expect fun isAppInstalled(androidPackage: String?, iosScheme: String?): Boolean
+import kotlinx.coroutines.flow.Flow
+
+internal expect fun appInstalled(androidPackage: String?, iosScheme: String?): Flow<Boolean>
 
 internal expect fun openUrl(androidUrl: String?, iosUrl: String?)
 
