@@ -17,15 +17,16 @@ import org.koin.core.context.startKoin
 @Composable
 internal fun App(
     systemAppearance: (isLight: Boolean) -> Unit = {}
-) = AppTheme(systemAppearance) {
-
+) {
     startKoin {
         modules(appModule())
     }
 
-    Column(modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) {
-        Navigator(AppsCatalog()) {
-            SlideTransition(it)
+    AppTheme(systemAppearance) {
+        Column(modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) {
+            Navigator(AppsCatalog()) {
+                SlideTransition(it)
+            }
         }
     }
 }
