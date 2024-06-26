@@ -7,11 +7,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -26,10 +29,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
@@ -71,21 +77,37 @@ private fun AppDetailsScreen(
     uiState: AppsDetailsUiState,
     back: () -> Unit,
 ) {
+    var footerHeightDp = remember { 0.dp }
+    val localDensity = LocalDensity.current
     Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Heading(app)
-            Body(app, uiState)
+        LazyColumn(modifier = Modifier.fillMaxWidth()) {
+            item {
+                Heading(app)
+            }
+            item {
+                Body(app, uiState)
+            }
+            item {
+                Spacer(
+                    modifier = Modifier.height(footerHeightDp)
+                )
+            }
         }
-        Footer(app, uiState)
+        Footer(
+            app = app,
+            uiState = uiState,
+            modifier = Modifier.onSizeChanged { size ->
+                footerHeightDp = with(localDensity) { size.height.toDp() }
+            }
+        )
         CloseButton(
             back = back,
-            modifier = Modifier.align(Alignment.TopEnd).padding(16.dp)
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(16.dp),
         )
     }
 }
@@ -156,6 +178,7 @@ fun BoxScope.Footer(
     Column(
         modifier = modifier
             .align(Alignment.BottomCenter)
+            .background(MaterialTheme.colorScheme.surface)
     ) {
         HorizontalDivider(
             modifier = Modifier
