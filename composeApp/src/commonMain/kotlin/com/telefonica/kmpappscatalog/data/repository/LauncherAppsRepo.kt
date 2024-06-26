@@ -1,6 +1,6 @@
-package com.telefonica.kmpappscatalog.data
+package com.telefonica.kmpappscatalog.data.repository
 
-import com.telefonica.kmpappscatalog.domain.LauncherApp
+import com.telefonica.kmpappscatalog.domain.entities.LauncherApp
 import com.telefonica.kmpappscatalog.appInstalled
 import com.telefonica.librarycatalogapi.AppsCatalogApi
 import com.telefonica.librarycatalogapi.models.ProductsResponse

@@ -19,15 +19,17 @@ import org.koin.core.context.startKoin
 internal fun App(
     systemAppearance: (isLight: Boolean) -> Unit = {}
 ) {
-    startKoin {
-        modules(appModule())
-    }
-
     AppTheme(systemAppearance) {
         Column(modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) {
             Navigator(AppsCatalog()) {
                 SlideTransition(it, orientation = SlideOrientation.Vertical)
             }
         }
+    }
+}
+
+fun initKoin() {
+    startKoin {
+        modules(appModule())
     }
 }

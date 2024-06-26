@@ -17,6 +17,8 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,15 +34,22 @@ import cafe.adriel.voyager.core.model.rememberNavigatorScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.telefonica.kmpappscatalog.domain.LauncherApp
-import com.telefonica.kmpappscatalog.presentation.appsDetails.AppsDetails
+import com.telefonica.kmpappscatalog.domain.entities.LauncherApp
+import com.telefonica.kmpappscatalog.domain.entities.LayoutType
+import com.telefonica.kmpappscatalog.presentation.appsCatalog.UILayoutType.Grid
 import com.telefonica.kmpappscatalog.presentation.appsCatalog.model.AppsCatalogUiState
+import com.telefonica.kmpappscatalog.presentation.appsCatalog.model.CatalogDataState
+import com.telefonica.kmpappscatalog.presentation.appsDetails.AppsDetails
 import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveCircularProgressIndicator
 import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveScaffold
 import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveTopAppBar
 import io.github.alexzhirkevich.cupertino.adaptive.ExperimentalAdaptiveApi
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
+import kmpappscatalog.composeapp.generated.resources.Res
+import kmpappscatalog.composeapp.generated.resources.ic_grid
+import kmpappscatalog.composeapp.generated.resources.ic_list
+import org.jetbrains.compose.resources.painterResource
 
 class AppsCatalog : Screen {
     @Composable
@@ -53,6 +62,7 @@ class AppsCatalog : Screen {
             onAppClicked = { app ->
                 navigator.push(AppsDetails(app))
             },
+            onLayoutTypeSelected = viewModel::setLayoutType,
         )
     }
 }
@@ -62,24 +72,58 @@ class AppsCatalog : Screen {
 internal fun AppsCatalogScreen(
     uiState: AppsCatalogUiState,
     onAppClicked: (LauncherApp) -> Unit,
+    onLayoutTypeSelected: (UILayoutType) -> Unit,
 ) {
     AdaptiveScaffold(
         topBar = {
             AdaptiveTopAppBar(
                 title = { Text("Apps Catalog") },
+                actions = {
+                    if (uiState.catalogDataState is CatalogDataState.Loaded) {
+                        if (uiState.uiLayoutType == Grid) {
+                            IconButton(onClick = { onLayoutTypeSelected(UILayoutType.List) }) {
+                                Icon(
+                                    painter = painterResource(Res.drawable.ic_list),
+                                    contentDescription = "List",
+                                )
+                            }
+                        } else {
+                            IconButton(onClick = { onLayoutTypeSelected(Grid) }) {
+                                Icon(
+                                    painter = painterResource(Res.drawable.ic_grid),
+                                    contentDescription = "Grid",
+                                )
+                            }
+                        }
+                    }
+                }
             )
         }
     ) { padding ->
-        if (uiState is AppsCatalogUiState.Loaded) {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                contentPadding = PaddingValues(16.dp),
-                modifier = Modifier.padding(padding),
-            ) {
-                items(uiState.apps) { app ->
-                    AppCard(app, onAppClicked)
+        if (uiState.catalogDataState is CatalogDataState.Loaded) {
+            if (uiState.uiLayoutType == Grid) {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    contentPadding = PaddingValues(16.dp),
+                    modifier = Modifier.padding(padding),
+                ) {
+                    items(uiState.catalogDataState.apps) { app ->
+                        AppCard(app, onAppClicked)
+                    }
+                }
+            } else {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(1),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    contentPadding = PaddingValues(16.dp),
+                    modifier = Modifier.padding(padding),
+                ) {
+                    items(uiState.catalogDataState.apps) { app ->
+                        AppCard(app, onAppClicked)
+                    }
                 }
             }
         } else {
@@ -121,5 +165,24 @@ private fun AppCard(
                 overflow = TextOverflow.Ellipsis,
             )
         }
+    }
+}
+
+enum class UILayoutType {
+    Grid,
+    List,;
+
+    fun toLayoutType(): LayoutType {
+        return when (this) {
+            Grid -> LayoutType.Grid
+            List -> LayoutType.List
+        }
+    }
+}
+
+fun LayoutType.toUILayoutType(): UILayoutType {
+    return when (this) {
+        LayoutType.Grid -> Grid
+        LayoutType.List -> UILayoutType.List
     }
 }

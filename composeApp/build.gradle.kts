@@ -50,6 +50,9 @@ kotlin {
             implementation(libs.napier)
             implementation(libs.kamel)
             implementation(libs.cupertino)
+
+            implementation(libs.atomicfu)
+            implementation(libs.datastore.preferences)
         }
     }
 }

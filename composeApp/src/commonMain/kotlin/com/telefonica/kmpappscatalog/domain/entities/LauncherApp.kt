@@ -1,4 +1,4 @@
-package com.telefonica.kmpappscatalog.domain
+package com.telefonica.kmpappscatalog.domain.entities
 
 import cafe.adriel.voyager.core.lifecycle.JavaSerializable
 

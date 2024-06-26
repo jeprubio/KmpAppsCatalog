@@ -41,7 +41,7 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.telefonica.kmpappscatalog.domain.LauncherApp
+import com.telefonica.kmpappscatalog.domain.entities.LauncherApp
 import com.telefonica.kmpappscatalog.openApp
 import com.telefonica.kmpappscatalog.openUrl
 import com.telefonica.kmpappscatalog.presentation.appsDetails.model.AppsDetailsUiState

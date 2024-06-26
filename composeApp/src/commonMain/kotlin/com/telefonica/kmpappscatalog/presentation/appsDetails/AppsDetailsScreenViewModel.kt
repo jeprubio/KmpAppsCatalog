@@ -2,8 +2,8 @@ package com.telefonica.kmpappscatalog.presentation.appsDetails
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.telefonica.kmpappscatalog.domain.IsAppInstalledUseCase
-import com.telefonica.kmpappscatalog.domain.LauncherApp
+import com.telefonica.kmpappscatalog.domain.usecase.IsAppInstalledUseCase
+import com.telefonica.kmpappscatalog.domain.entities.LauncherApp
 import com.telefonica.kmpappscatalog.presentation.appsDetails.model.AppsDetailsUiState
 import com.telefonica.kmpappscatalog.presentation.appsDetails.model.IsAppInstalled
 import io.github.aakira.napier.Napier

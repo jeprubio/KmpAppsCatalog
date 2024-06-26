@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import com.telefonica.kmpappscatalog.presentation.initKoin
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
@@ -21,6 +22,8 @@ class AndroidApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        initKoin()
         Napier.base(DebugAntilog())
         INSTANCE = this
     }

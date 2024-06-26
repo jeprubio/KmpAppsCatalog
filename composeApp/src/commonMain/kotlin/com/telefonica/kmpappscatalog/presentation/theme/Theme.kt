@@ -2,9 +2,7 @@ package com.telefonica.kmpappscatalog.presentation.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
@@ -22,8 +20,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.telefonica.kmpappscatalog.determineTheme
 import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveTheme
+import io.github.alexzhirkevich.cupertino.adaptive.CupertinoThemeSpec
+import io.github.alexzhirkevich.cupertino.adaptive.ExperimentalAdaptiveApi
+import io.github.alexzhirkevich.cupertino.adaptive.MaterialThemeSpec
 import io.github.alexzhirkevich.cupertino.adaptive.Theme
-import io.github.alexzhirkevich.cupertino.theme.CupertinoTheme
 
 private val LightColorScheme = lightColorScheme(
     primary = md_theme_light_primary,
@@ -107,6 +107,7 @@ private val AppTypography = Typography(
 
 internal val LocalThemeIsDark = compositionLocalOf { mutableStateOf(true) }
 
+@OptIn(ExperimentalAdaptiveApi::class)
 @Composable
 internal fun AppTheme(
     systemAppearance: (isLight: Boolean) -> Unit,
@@ -123,26 +124,19 @@ internal fun AppTheme(
             systemAppearance(!isDark)
         }
         AdaptiveTheme(
-            material = {
-                MaterialTheme(
-                    colorScheme = if (!isDark) LightColorScheme else DarkColorScheme,
-                    typography = AppTypography,
-                    shapes = AppShapes,
-                    content = {
-                        Surface(content = content)
-                    }
-                )
-            },
-            cupertino = {
-                CupertinoTheme(
-                    colorScheme = if (isDark) {
-                        io.github.alexzhirkevich.cupertino.theme.darkColorScheme()
-                    } else {
-                        io.github.alexzhirkevich.cupertino.theme.lightColorScheme()
-                    },
-                    content = it
-                )
-            },
+            material =
+            MaterialThemeSpec(
+                colorScheme = if (!isDark) LightColorScheme else DarkColorScheme,
+                typography = AppTypography,
+                shapes = AppShapes,
+            ),
+            cupertino = CupertinoThemeSpec(
+                colorScheme = if (isDark) {
+                    io.github.alexzhirkevich.cupertino.theme.darkColorScheme()
+                } else {
+                    io.github.alexzhirkevich.cupertino.theme.lightColorScheme()
+                },
+            ),
             target = theme,
             content = content
         )
