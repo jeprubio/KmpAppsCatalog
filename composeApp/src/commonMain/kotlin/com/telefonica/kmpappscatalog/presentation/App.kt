@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.transitions.SlideOrientation
 import cafe.adriel.voyager.transitions.SlideTransition
 import com.telefonica.kmpappscatalog.di.appModule
 import com.telefonica.kmpappscatalog.presentation.appsCatalog.AppsCatalog
@@ -25,7 +26,7 @@ internal fun App(
     AppTheme(systemAppearance) {
         Column(modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) {
             Navigator(AppsCatalog()) {
-                SlideTransition(it)
+                SlideTransition(it, orientation = SlideOrientation.Vertical)
             }
         }
     }
