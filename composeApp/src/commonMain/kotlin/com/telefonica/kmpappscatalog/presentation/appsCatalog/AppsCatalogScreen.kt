@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,10 +39,13 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.telefonica.kmpappscatalog.domain.entities.LauncherApp
 import com.telefonica.kmpappscatalog.domain.entities.LayoutType
+import com.telefonica.kmpappscatalog.openApp
+import com.telefonica.kmpappscatalog.openUrl
 import com.telefonica.kmpappscatalog.presentation.appsCatalog.UILayoutType.Grid
 import com.telefonica.kmpappscatalog.presentation.appsCatalog.model.AppsCatalogUiState
 import com.telefonica.kmpappscatalog.presentation.appsCatalog.model.CatalogDataState
 import com.telefonica.kmpappscatalog.presentation.appsDetails.AppsDetails
+import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveButton
 import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveCircularProgressIndicator
 import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveScaffold
 import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveTopAppBar
@@ -154,6 +158,7 @@ fun AppCatalogToolbar(uiState: AppsCatalogUiState, onLayoutTypeSelected: (UILayo
     )
 }
 
+@OptIn(ExperimentalAdaptiveApi::class)
 @Composable
 fun ExtendedAppCard(
     app: LauncherApp,
@@ -172,14 +177,33 @@ fun ExtendedAppCard(
             overflow = TextOverflow.Ellipsis,
         )
         Spacer(modifier = Modifier.height(8.dp))
-        TextButton(onClick = { onAppClicked(app) }) {
-            Text(
-                "More info",
-                color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.bodySmall,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            if (app.isInstalled) {
+                AdaptiveButton(onClick = { openApp(app.androidPackage, app.iosScheme) }) {
+                    Text(
+                        "Open",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                    )
+                }
+            } else {
+                AdaptiveButton(onClick = { openUrl(app.androidInstallUrl, app.iosInstallUrl) }) {
+                    Text(
+                        "Install",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                    )
+                }
+            }
+            TextButton(onClick = { onAppClicked(app) }) {
+                Text(
+                    "More info",
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.bodySmall,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
         }
     }
 }

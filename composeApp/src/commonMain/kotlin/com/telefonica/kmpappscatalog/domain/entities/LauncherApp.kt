@@ -11,4 +11,6 @@ data class LauncherApp(
     val iosInstallUrl: String,
     val androidPackage: String,
     val iosScheme: String,
-): JavaSerializable
+): JavaSerializable {
+    var isInstalled: Boolean = false
+}

@@ -2,8 +2,10 @@ package com.telefonica.kmpappscatalog.presentation.appsCatalog
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.telefonica.kmpappscatalog.domain.entities.LauncherApp
 import com.telefonica.kmpappscatalog.domain.usecase.GetLauncherAppsUseCase
 import com.telefonica.kmpappscatalog.domain.usecase.GetLayoutTypeUseCase
+import com.telefonica.kmpappscatalog.domain.usecase.IsAppInstalledUseCase
 import com.telefonica.kmpappscatalog.domain.usecase.SaveLayoutTypeUseCase
 import com.telefonica.kmpappscatalog.presentation.appsCatalog.model.AppsCatalogUiState
 import com.telefonica.kmpappscatalog.presentation.appsCatalog.model.CatalogDataState
@@ -20,6 +22,7 @@ class AppsCatalogScreenViewModel : ScreenModel, KoinComponent {
     private val getLauncherUseCase: GetLauncherAppsUseCase by inject()
     private val saveLayoutTypeUseCase: SaveLayoutTypeUseCase by inject()
     private val getLayoutTypeUseCase: GetLayoutTypeUseCase by inject()
+    private val isAppInstalledUseCase: IsAppInstalledUseCase by inject()
 
     init {
         getApps()
@@ -35,12 +38,28 @@ class AppsCatalogScreenViewModel : ScreenModel, KoinComponent {
             getLauncherUseCase().fold(
                 onSuccess = { apps ->
                     _uiState.update { it.copy(catalogDataState = CatalogDataState.Loaded(apps)) }
+                    checkInstalledApps(apps)
                 },
                 onFailure = { error ->
                     _uiState.update { it.copy(catalogDataState = CatalogDataState.Error(error)) }
                 }
             )
         }
+    }
+
+    private fun checkInstalledApps(apps: List<LauncherApp>) {
+        apps.forEach { app ->
+            screenModelScope.launch {
+                isAppInstalledUseCase(app)
+                    .collect { isInstalledResult ->
+                        isInstalledResult.fold(
+                            onSuccess = { app.isInstalled = it },
+                            onFailure = { app.isInstalled = false }
+                        )
+                    }
+            }
+        }
+        _uiState.update { it.copy(catalogDataState = CatalogDataState.Loaded(apps)) }
     }
 
     fun setLayoutType(uiLayoutType: UILayoutType) {
