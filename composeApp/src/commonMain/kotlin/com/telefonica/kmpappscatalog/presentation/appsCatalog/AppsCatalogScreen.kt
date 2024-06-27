@@ -1,6 +1,7 @@
 package com.telefonica.kmpappscatalog.presentation.appsCatalog
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -76,27 +78,9 @@ internal fun AppsCatalogScreen(
 ) {
     AdaptiveScaffold(
         topBar = {
-            AdaptiveTopAppBar(
-                title = { Text("Apps Catalog") },
-                actions = {
-                    if (uiState.catalogDataState is CatalogDataState.Loaded) {
-                        if (uiState.uiLayoutType == Grid) {
-                            IconButton(onClick = { onLayoutTypeSelected(UILayoutType.List) }) {
-                                Icon(
-                                    painter = painterResource(Res.drawable.ic_list),
-                                    contentDescription = "List",
-                                )
-                            }
-                        } else {
-                            IconButton(onClick = { onLayoutTypeSelected(Grid) }) {
-                                Icon(
-                                    painter = painterResource(Res.drawable.ic_grid),
-                                    contentDescription = "Grid",
-                                )
-                            }
-                        }
-                    }
-                }
+            AppCatalogToolbar(
+                uiState,
+                onLayoutTypeSelected,
             )
         }
     ) { padding ->
@@ -110,7 +94,10 @@ internal fun AppsCatalogScreen(
                     modifier = Modifier.padding(padding),
                 ) {
                     items(uiState.catalogDataState.apps) { app ->
-                        AppCard(app, onAppClicked)
+                        AppCard(
+                            app = app,
+                            onAppClicked = onAppClicked
+                        )
                     }
                 }
             } else {
@@ -122,7 +109,10 @@ internal fun AppsCatalogScreen(
                     modifier = Modifier.padding(padding),
                 ) {
                     items(uiState.catalogDataState.apps) { app ->
-                        AppCard(app, onAppClicked)
+                        ExtendedAppCard(
+                            app = app,
+                            onAppClicked = onAppClicked
+                        )
                     }
                 }
             }
@@ -137,10 +127,69 @@ internal fun AppsCatalogScreen(
     }
 }
 
+@OptIn(ExperimentalAdaptiveApi::class)
+@Composable
+fun AppCatalogToolbar(uiState: AppsCatalogUiState, onLayoutTypeSelected: (UILayoutType) -> Unit) {
+    AdaptiveTopAppBar(
+        title = { Text("Apps Catalog") },
+        actions = {
+            if (uiState.catalogDataState is CatalogDataState.Loaded) {
+                if (uiState.uiLayoutType == Grid) {
+                    IconButton(onClick = { onLayoutTypeSelected(UILayoutType.List) }) {
+                        Icon(
+                            painter = painterResource(Res.drawable.ic_list),
+                            contentDescription = "List",
+                        )
+                    }
+                } else {
+                    IconButton(onClick = { onLayoutTypeSelected(Grid) }) {
+                        Icon(
+                            painter = painterResource(Res.drawable.ic_grid),
+                            contentDescription = "Grid",
+                        )
+                    }
+                }
+            }
+        }
+    )
+}
+
+@Composable
+fun ExtendedAppCard(
+    app: LauncherApp,
+    onAppClicked: (LauncherApp) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    AppCard(
+        app = app,
+        onAppClicked = null,
+        modifier = modifier,
+    ) {
+        Text(
+            app.description,
+            style = MaterialTheme.typography.bodySmall,
+            maxLines = 5,
+            overflow = TextOverflow.Ellipsis,
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        TextButton(onClick = { onAppClicked(app) }) {
+            Text(
+                "More info",
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.bodySmall,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+    }
+}
+
 @Composable
 private fun AppCard(
     app: LauncherApp,
-    onAppClicked: (LauncherApp) -> Unit
+    modifier: Modifier = Modifier,
+    onAppClicked: ((LauncherApp) -> Unit)? = null,
+    bottom: @Composable (() -> Unit)? = null,
 ) {
     Card(
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
@@ -148,8 +197,12 @@ private fun AppCard(
             containerColor = MaterialTheme.colorScheme.surface,
         ),
         shape = RectangleShape,
-        onClick = { onAppClicked(app) },
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth()
+            .then(
+                if (onAppClicked != null)
+                    Modifier.clickable { onAppClicked(app) }
+                else Modifier
+            ),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             KamelImage(
@@ -164,13 +217,17 @@ private fun AppCard(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
+            if (bottom != null) {
+                Spacer(modifier = Modifier.height(8.dp))
+                bottom()
+            }
         }
     }
 }
 
 enum class UILayoutType {
     Grid,
-    List,;
+    List, ;
 
     fun toLayoutType(): LayoutType {
         return when (this) {
