@@ -39,25 +39,6 @@ internal actual fun openUrl(androidUrl: String?, iosUrl: String?) {
     AndroidApp.INSTANCE.startActivity(intent)
 }
 
-internal actual fun appInstalled(androidPackage: String?, iosScheme: String?): Flow<Boolean> = flow {
-    while (true) {
-        emit(isAppInstalled(androidPackage))
-        delay(POLLING_INTERVAL)
-    }
-}.flowOn(Dispatchers.IO)
-
-private fun isAppInstalled(androidPackage: String?): Boolean {
-    if (androidPackage == null) return false
-
-    return try {
-        val context = AndroidApp.INSTANCE
-        context.packageManager.getPackageInfo(androidPackage, PackageManager.GET_ACTIVITIES)
-        true
-    } catch (e: PackageManager.NameNotFoundException) {
-        false
-    }
-}
-
 internal actual fun openApp(androidPackage: String?, iosScheme: String?) {
     if (androidPackage == null) return
 
