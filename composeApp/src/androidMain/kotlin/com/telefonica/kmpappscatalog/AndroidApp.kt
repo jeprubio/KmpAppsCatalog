@@ -2,18 +2,10 @@ package com.telefonica.kmpappscatalog
 
 import android.app.Application
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import com.telefonica.kmpappscatalog.presentation.initKoin
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-
-const val POLLING_INTERVAL = 1_000L
 
 class AndroidApp : Application() {
     companion object {

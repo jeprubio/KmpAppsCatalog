@@ -33,12 +33,43 @@ class AppsCatalogScreenViewModel : ScreenModel, KoinComponent {
         }
     }
 
+    fun setLayoutType(uiLayoutType: UILayoutType) {
+        _uiState.update { it.copy(uiLayoutType = uiLayoutType) }.also {
+            screenModelScope.launch {
+                saveLayoutTypeUseCase(uiLayoutType.toLayoutType())
+            }
+        }
+    }
+
+    fun setFilter(filter: String) {
+        _uiState.update {
+            val loadedState = (_uiState.value.catalogDataState as? CatalogDataState.Loaded)
+            it.copy(
+                selectedFilter = filter,
+                catalogDataState = CatalogDataState.Loaded(
+                    apps = loadedState?.apps ?: emptyList(),
+                    filters = loadedState?.filters ?: emptyList(),
+                    filteredApps = getFilteredApps(loadedState?.apps ?: emptyList(), filter)
+                )
+            )
+        }
+    }
+
     private fun getApps() {
         screenModelScope.launch {
             getLauncherUseCase().fold(
                 onSuccess = { apps ->
-                    _uiState.update { it.copy(catalogDataState = CatalogDataState.Loaded(apps)) }
-                    checkInstalledApps(apps)
+                    val filters: List<String> = getFilters(apps)
+                    _uiState.update {
+                        it.copy(
+                            catalogDataState = CatalogDataState.Loaded(
+                                apps,
+                                filters,
+                                getFilteredApps(apps, (_uiState.value.selectedFilter))
+                            )
+                        )
+                    }
+                    checkInstalledApps(apps, filters)
                 },
                 onFailure = { error ->
                     _uiState.update { it.copy(catalogDataState = CatalogDataState.Error(error)) }
@@ -47,7 +78,23 @@ class AppsCatalogScreenViewModel : ScreenModel, KoinComponent {
         }
     }
 
-    private fun checkInstalledApps(apps: List<LauncherApp>) {
+    private fun getFilters(apps: List<LauncherApp>) =
+        listOf("All") + apps.map { it.project }.distinct().sorted()
+
+    private fun getFilteredApps(
+        apps: List<LauncherApp>,
+        selectedFilter: String
+    ): List<LauncherApp> {
+        val filteredApps =
+            if (selectedFilter != "All") apps.filter { it.project == selectedFilter }
+            else apps
+        return filteredApps
+    }
+
+    private fun checkInstalledApps(
+        apps: List<LauncherApp>,
+        filters: List<String>,
+    ) {
         apps.forEach { app ->
             screenModelScope.launch {
                 isAppInstalledUseCase(app)
@@ -59,15 +106,14 @@ class AppsCatalogScreenViewModel : ScreenModel, KoinComponent {
                     }
             }
         }
-        _uiState.update { it.copy(catalogDataState = CatalogDataState.Loaded(apps)) }
-    }
-
-    fun setLayoutType(uiLayoutType: UILayoutType) {
-        _uiState.update { it.copy(uiLayoutType = uiLayoutType) }.also {
-            screenModelScope.launch {
-                saveLayoutTypeUseCase(uiLayoutType.toLayoutType())
-            }
+        _uiState.update {
+            it.copy(
+                catalogDataState = CatalogDataState.Loaded(
+                    apps,
+                    filters,
+                    getFilteredApps(apps, (_uiState.value.selectedFilter)),
+                )
+            )
         }
     }
-
 }

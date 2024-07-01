@@ -26,6 +26,7 @@ private fun ProductsResponse.toLauncherApp(): List<LauncherApp> {
             packageName = product.android.packageName,
             icon = product.icon,
             description = product.description,
+            project = product.project,
             androidInstallUrl = product.android.installUrl,
             iosInstallUrl = product.ios.installUrl,
             androidPackage = product.android.packageName,

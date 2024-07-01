@@ -13,12 +13,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -57,6 +61,8 @@ import kmpappscatalog.composeapp.generated.resources.ic_grid
 import kmpappscatalog.composeapp.generated.resources.ic_list
 import org.jetbrains.compose.resources.painterResource
 
+private const val ROUNDED_CORNERS = 100
+
 class AppsCatalog : Screen {
     @Composable
     override fun Content() {
@@ -69,6 +75,7 @@ class AppsCatalog : Screen {
                 navigator.push(AppsDetails(app))
             },
             onLayoutTypeSelected = viewModel::setLayoutType,
+            onFilterSelected = viewModel::setFilter,
         )
     }
 }
@@ -79,6 +86,7 @@ internal fun AppsCatalogScreen(
     uiState: AppsCatalogUiState,
     onAppClicked: (LauncherApp) -> Unit,
     onLayoutTypeSelected: (UILayoutType) -> Unit,
+    onFilterSelected: (String) -> Unit,
 ) {
     AdaptiveScaffold(
         topBar = {
@@ -89,34 +97,49 @@ internal fun AppsCatalogScreen(
         }
     ) { padding ->
         if (uiState.catalogDataState is CatalogDataState.Loaded) {
-            if (uiState.uiLayoutType == Grid) {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    contentPadding = PaddingValues(16.dp),
-                    modifier = Modifier.padding(padding),
-                ) {
-                    items(uiState.catalogDataState.apps) { app ->
-                        AppCard(
-                            app = app,
-                            onAppClicked = onAppClicked
+            Column(modifier = Modifier.padding(padding)) {
+                LazyRow(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+                    items(uiState.catalogDataState.filters) { filter ->
+                        FilterChip(
+                            label = { Text(filter) },
+                            selected = filter == uiState.selectedFilter,
+                            modifier = Modifier.padding(end = 8.dp),
+                            colors = FilterChipDefaults.filterChipColors(
+                                selectedLabelColor = MaterialTheme.colorScheme.primary,
+                                selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                            ),
+                            shape = RoundedCornerShape(ROUNDED_CORNERS),
+                            onClick = { onFilterSelected(filter) },
                         )
                     }
                 }
-            } else {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(1),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    contentPadding = PaddingValues(16.dp),
-                    modifier = Modifier.padding(padding),
-                ) {
-                    items(uiState.catalogDataState.apps) { app ->
-                        ExtendedAppCard(
-                            app = app,
-                            onAppClicked = onAppClicked
-                        )
+                if (uiState.uiLayoutType == Grid) {
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        contentPadding = PaddingValues(16.dp),
+                    ) {
+                        items(uiState.catalogDataState.filteredApps) { app ->
+                            AppCard(
+                                app = app,
+                                onAppClicked = onAppClicked
+                            )
+                        }
+                    }
+                } else {
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(1),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        contentPadding = PaddingValues(16.dp),
+                    ) {
+                        items(uiState.catalogDataState.filteredApps) { app ->
+                            ExtendedAppCard(
+                                app = app,
+                                onAppClicked = onAppClicked
+                            )
+                        }
                     }
                 }
             }

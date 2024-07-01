@@ -7,6 +7,7 @@ data class LauncherApp(
     val packageName: String,
     val icon: String,
     val description: String,
+    val project: String,
     val androidInstallUrl: String,
     val iosInstallUrl: String,
     val androidPackage: String,
