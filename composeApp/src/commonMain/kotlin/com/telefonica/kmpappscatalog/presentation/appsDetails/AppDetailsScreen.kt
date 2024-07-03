@@ -41,18 +41,20 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.telefonica.kmpappscatalog.AppInstallation
 import com.telefonica.kmpappscatalog.domain.entities.LauncherApp
 import com.telefonica.kmpappscatalog.openApp
 import com.telefonica.kmpappscatalog.openUrl
 import com.telefonica.kmpappscatalog.presentation.appsDetails.model.AppsDetailsUiState
 import com.telefonica.kmpappscatalog.presentation.appsDetails.model.IsAppInstalled
-import com.telefonica.kmpappscatalog.shouldShowUninstallButton
-import com.telefonica.kmpappscatalog.uninstallApp
 import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveButton
 import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveCircularProgressIndicator
 import io.github.alexzhirkevich.cupertino.adaptive.ExperimentalAdaptiveApi
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
+import org.koin.compose.koinInject
+
+private const val HEADING_ASPECT_RATIO = 4f / 3f
 
 class AppsDetails(private val app: LauncherApp) : Screen {
     @Composable
@@ -117,7 +119,7 @@ private fun Heading(app: LauncherApp) {
     Box(
         Modifier
             .fillMaxWidth()
-            .aspectRatio(4f / 3f)
+            .aspectRatio(HEADING_ASPECT_RATIO)
     ) {
         KamelImage(
             resource = asyncPainterResource(data = app.icon),
@@ -173,8 +175,9 @@ fun Body(
 fun BoxScope.Footer(
     app: LauncherApp,
     uiState: AppsDetailsUiState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
+    val appInstallation = koinInject<AppInstallation>()
     Column(
         modifier = modifier
             .align(Alignment.BottomCenter)
@@ -213,10 +216,10 @@ fun BoxScope.Footer(
                             title = "Open",
                             buttonAction = { openApp(app.androidPackage, app.iosScheme) },
                         )
-                        if (shouldShowUninstallButton()) {
+                        if (appInstallation.shouldShowUninstallButton()) {
                             OutlinedActionButton(
                                 title = "Uninstall",
-                                buttonAction = { uninstallApp(app.androidPackage, app.iosScheme) },
+                                buttonAction = { appInstallation.uninstallApp(app.androidPackage, app.iosScheme) },
                             )
                         }
                     }

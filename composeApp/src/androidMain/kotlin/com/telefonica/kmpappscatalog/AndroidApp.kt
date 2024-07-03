@@ -3,9 +3,10 @@ package com.telefonica.kmpappscatalog
 import android.app.Application
 import android.content.Intent
 import android.net.Uri
-import com.telefonica.kmpappscatalog.presentation.initKoin
+import com.telefonica.kmpappscatalog.di.initKoin
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
+import org.koin.android.ext.koin.androidContext
 
 class AndroidApp : Application() {
     companion object {
@@ -15,7 +16,9 @@ class AndroidApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        initKoin()
+        initKoin {
+            androidContext(this@AndroidApp)
+        }
         Napier.base(DebugAntilog())
         INSTANCE = this
     }
@@ -37,20 +40,5 @@ internal actual fun openApp(androidPackage: String?, iosScheme: String?) {
     val context = AndroidApp.INSTANCE
     val intent = context.packageManager.getLaunchIntentForPackage(androidPackage)
     intent?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    context.startActivity(intent)
-}
-
-internal actual fun shouldShowUninstallButton(): Boolean {
-    return true
-}
-
-internal actual fun uninstallApp(androidPackage: String?, iosScheme: String?) {
-    if (androidPackage == null) return
-
-    val context = AndroidApp.INSTANCE
-    val intent = Intent(Intent.ACTION_DELETE).apply {
-        data = Uri.parse("package:$androidPackage")
-        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    }
     context.startActivity(intent)
 }

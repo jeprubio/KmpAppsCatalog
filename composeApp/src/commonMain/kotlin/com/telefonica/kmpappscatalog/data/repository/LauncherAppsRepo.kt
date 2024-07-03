@@ -1,20 +1,23 @@
 package com.telefonica.kmpappscatalog.data.repository
 
+import com.telefonica.kmpappscatalog.AppInstallation
 import com.telefonica.kmpappscatalog.domain.entities.LauncherApp
-import com.telefonica.kmpappscatalog.appInstalled
 import com.telefonica.librarycatalogapi.AppsCatalogApi
 import com.telefonica.librarycatalogapi.models.ProductsResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 
-class LauncherAppsRepo {
+class LauncherAppsRepo(
+    private val appInstallation: AppInstallation,
+) {
 
     suspend fun getLauncherApps(): Result<List<LauncherApp>> =
         AppsCatalogApi.createDefault().getApps().map { it.toLauncherApp() }
 
     fun checkAppInstalled(launcherApp: LauncherApp): Flow<Result<Boolean>> {
-        return appInstalled(launcherApp.androidPackage, launcherApp.iosScheme).map { Result.success(it) }
+        return appInstallation.isAppInstalled(launcherApp.androidPackage, launcherApp.iosScheme)
+            .map { Result.success(it) }
             .catch { emit(Result.failure(it)) }
     }
 }

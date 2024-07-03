@@ -90,6 +90,7 @@ android {
         compose = true
     }
     dependencies {
+        implementation(libs.koin.android)
         debugImplementation(compose.uiTooling)
     }
 }

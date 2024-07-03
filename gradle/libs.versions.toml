@@ -53,6 +53,7 @@ voyager-screenmodel = { module = "cafe.adriel.voyager:voyager-screenmodel", vers
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin-compose"}
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 
 kamel = { group = "media.kamel", name = "kamel-image", version.ref = "kamel" }
 cupertino = { module = "io.github.alexzhirkevich:cupertino-adaptive", version = "0.1.0-alpha04" }

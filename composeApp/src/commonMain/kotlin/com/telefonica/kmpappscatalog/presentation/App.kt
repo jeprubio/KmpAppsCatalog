@@ -10,10 +10,8 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideOrientation
 import cafe.adriel.voyager.transitions.SlideTransition
-import com.telefonica.kmpappscatalog.di.appModule
 import com.telefonica.kmpappscatalog.presentation.appsCatalog.AppsCatalog
 import com.telefonica.kmpappscatalog.presentation.theme.AppTheme
-import org.koin.core.context.startKoin
 
 @Composable
 internal fun App(
@@ -25,11 +23,5 @@ internal fun App(
                 SlideTransition(it, orientation = SlideOrientation.Vertical)
             }
         }
-    }
-}
-
-fun initKoin() {
-    startKoin {
-        modules(appModule())
     }
 }
