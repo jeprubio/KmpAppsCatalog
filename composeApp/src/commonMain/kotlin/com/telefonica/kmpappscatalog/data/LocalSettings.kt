@@ -25,5 +25,3 @@ object LocalSettings {
 
     const val dataStoreFileName = "settings.preferences_pb"
 }
-
-expect fun createDataStore(): DataStore<Preferences>
