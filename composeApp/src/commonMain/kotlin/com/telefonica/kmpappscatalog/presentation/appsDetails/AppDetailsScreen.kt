@@ -42,9 +42,8 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.telefonica.kmpappscatalog.AppInstallation
+import com.telefonica.kmpappscatalog.OpenExternal
 import com.telefonica.kmpappscatalog.domain.entities.LauncherApp
-import com.telefonica.kmpappscatalog.openApp
-import com.telefonica.kmpappscatalog.openUrl
 import com.telefonica.kmpappscatalog.presentation.appsDetails.model.AppsDetailsUiState
 import com.telefonica.kmpappscatalog.presentation.appsDetails.model.IsAppInstalled
 import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveButton
@@ -55,6 +54,7 @@ import io.kamel.image.asyncPainterResource
 import org.koin.compose.koinInject
 
 private const val HEADING_ASPECT_RATIO = 4f / 3f
+private const val CLOSE_BUTTON_ALPHA = 0.7f
 
 class AppsDetails(private val app: LauncherApp) : Screen {
     @Composable
@@ -176,6 +176,7 @@ fun BoxScope.Footer(
     app: LauncherApp,
     uiState: AppsDetailsUiState,
     modifier: Modifier = Modifier,
+    openExternal: OpenExternal = koinInject(),
 ) {
     val appInstallation = koinInject<AppInstallation>()
     Column(
@@ -209,12 +210,12 @@ fun BoxScope.Footer(
                     if (!installed) {
                         ActionButton(
                             title = "Install",
-                            buttonAction = { openUrl(app.androidInstallUrl, app.iosInstallUrl) },
+                            buttonAction = { openExternal.openUrl(app.androidInstallUrl, app.iosInstallUrl) },
                         )
                     } else {
                         ActionButton(
                             title = "Open",
-                            buttonAction = { openApp(app.androidPackage, app.iosScheme) },
+                            buttonAction = { openExternal.openApp(app.androidPackage, app.iosScheme) },
                         )
                         if (appInstallation.shouldShowUninstallButton()) {
                             OutlinedActionButton(
@@ -251,7 +252,7 @@ private fun CloseButton(back: () -> Unit, modifier: Modifier = Modifier) {
         onClick = { back() },
         modifier = modifier
             .clip(CircleShape)
-            .alpha(0.7f)
+            .alpha(CLOSE_BUTTON_ALPHA)
             .background(MaterialTheme.colorScheme.surface)
     ) {
         Icon(

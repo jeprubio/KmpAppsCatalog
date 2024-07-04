@@ -41,10 +41,9 @@ import cafe.adriel.voyager.core.model.rememberNavigatorScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.telefonica.kmpappscatalog.OpenExternal
 import com.telefonica.kmpappscatalog.domain.entities.LauncherApp
 import com.telefonica.kmpappscatalog.domain.entities.LayoutType
-import com.telefonica.kmpappscatalog.openApp
-import com.telefonica.kmpappscatalog.openUrl
 import com.telefonica.kmpappscatalog.presentation.appsCatalog.UILayoutType.Grid
 import com.telefonica.kmpappscatalog.presentation.appsCatalog.model.AppsCatalogUiState
 import com.telefonica.kmpappscatalog.presentation.appsCatalog.model.CatalogDataState
@@ -60,6 +59,7 @@ import kmpappscatalog.composeapp.generated.resources.Res
 import kmpappscatalog.composeapp.generated.resources.ic_grid
 import kmpappscatalog.composeapp.generated.resources.ic_list
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.koinInject
 
 private const val ROUNDED_CORNERS = 100
 
@@ -187,6 +187,7 @@ fun ExtendedAppCard(
     app: LauncherApp,
     onAppClicked: (LauncherApp) -> Unit,
     modifier: Modifier = Modifier,
+    appOpenExternal: OpenExternal = koinInject(),
 ) {
     AppCard(
         app = app,
@@ -202,7 +203,7 @@ fun ExtendedAppCard(
         Spacer(modifier = Modifier.height(8.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             if (app.isInstalled) {
-                AdaptiveButton(onClick = { openApp(app.androidPackage, app.iosScheme) }) {
+                AdaptiveButton(onClick = { appOpenExternal.openApp(app.androidPackage, app.iosScheme) }) {
                     Text(
                         "Open",
                         style = MaterialTheme.typography.bodySmall,
@@ -210,7 +211,7 @@ fun ExtendedAppCard(
                     )
                 }
             } else {
-                AdaptiveButton(onClick = { openUrl(app.androidInstallUrl, app.iosInstallUrl) }) {
+                AdaptiveButton(onClick = { appOpenExternal.openUrl(app.androidInstallUrl, app.iosInstallUrl) }) {
                     Text(
                         "Install",
                         style = MaterialTheme.typography.bodySmall,

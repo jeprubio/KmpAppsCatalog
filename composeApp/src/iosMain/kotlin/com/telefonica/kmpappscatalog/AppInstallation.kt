@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.flowOn
 import platform.Foundation.NSURL
 import platform.UIKit.UIApplication
 
+const val POLLING_INTERVAL = 1000L
+
 actual class AppInstallation {
     actual fun isAppInstalled(
         androidPackage: String?,
@@ -24,9 +26,14 @@ actual class AppInstallation {
     private fun isAppInstalled(iosScheme: String?): Boolean {
         return when {
             iosScheme != null -> {
-                NSURL.URLWithString(iosScheme)?.let {
-                    UIApplication.sharedApplication.canOpenURL(it)
-                } ?: false
+                try {
+                    val formattedScheme = if (iosScheme.endsWith("://")) iosScheme else "$iosScheme://"
+                    NSURL.URLWithString(formattedScheme)?.let {
+                        UIApplication.sharedApplication.canOpenURL(it)
+                    } ?: false
+                } catch (e: Exception) {
+                    false
+                }
             }
 
             else -> false
