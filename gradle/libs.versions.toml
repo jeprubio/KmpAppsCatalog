@@ -8,23 +8,24 @@ androidx-appcompat = "1.7.0"
 androidx-constraintlayout = "2.1.4"
 androidx-core-ktx = "1.13.1"
 androidx-espresso-core = "3.6.1"
-material3 = "1.6.11"
 androidx-test-junit = "1.2.1"
+atomicfu = "0.25.0"
 compose-plugin = "1.6.11"
+cupertino = "0.1.0-alpha04"
+datastore = "1.1.1"
 junit = "4.13.2"
-kotlin = "2.0.0"
-kotlinxCoroutinesCore = "1.8.1"
-ktorVersion = "2.3.12"
-kmmbridge = "0.5.5"
-napier = "2.7.1"
-kotestAssertionsCore = "5.9.0"
-voyager = "1.1.0-beta02"
+kamel = "0.9.5"
 koin = "3.5.6"
 koin-compose = "1.1.5"
-kamel = "0.9.5"
+kotestAssertionsCore = "5.9.0"
+kotlin = "2.0.0"
+kotlinxCoroutinesCore = "1.8.1"
+kmmbridge = "0.5.5"
+ktorVersion = "2.3.12"
+material3 = "1.6.11"
+napier = "2.7.1"
 skie = "0.8.2"
-datastore = "1.1.1"
-atomicfu = "0.25.0"
+voyager = "1.1.0-beta02"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -56,7 +57,7 @@ koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin-com
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 
 kamel = { group = "media.kamel", name = "kamel-image", version.ref = "kamel" }
-cupertino = { module = "io.github.alexzhirkevich:cupertino-adaptive", version = "0.1.0-alpha04" }
+cupertino = { module = "io.github.alexzhirkevich:cupertino-adaptive", version.ref = "cupertino" }
 
 atomicfu = { group = "org.jetbrains.kotlinx", name = "atomicfu", version.ref = "atomicfu" }
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }

@@ -27,7 +27,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -45,12 +44,14 @@ import com.telefonica.kmpappscatalog.OpenExternal
 import com.telefonica.kmpappscatalog.domain.entities.LauncherApp
 import com.telefonica.kmpappscatalog.domain.entities.LayoutType
 import com.telefonica.kmpappscatalog.presentation.appsCatalog.UILayoutType.Grid
+import com.telefonica.kmpappscatalog.presentation.appsCatalog.component.AppButton
+import com.telefonica.kmpappscatalog.presentation.appsCatalog.component.OutlinedAppButton
 import com.telefonica.kmpappscatalog.presentation.appsCatalog.model.AppsCatalogUiState
 import com.telefonica.kmpappscatalog.presentation.appsCatalog.model.CatalogDataState
 import com.telefonica.kmpappscatalog.presentation.appsDetails.AppsDetails
-import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveButton
 import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveCircularProgressIndicator
 import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveScaffold
+import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveTextButton
 import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveTopAppBar
 import io.github.alexzhirkevich.cupertino.adaptive.ExperimentalAdaptiveApi
 import io.kamel.image.KamelImage
@@ -203,23 +204,17 @@ fun ExtendedAppCard(
         Spacer(modifier = Modifier.height(8.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             if (app.isInstalled) {
-                AdaptiveButton(onClick = { appOpenExternal.openApp(app.androidPackage, app.iosScheme) }) {
-                    Text(
-                        "Open",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                    )
-                }
+                AppButton(
+                    text = "Open",
+                    onClick = { appOpenExternal.openApp(app.androidPackage, app.iosScheme) }
+                )
             } else {
-                AdaptiveButton(onClick = { appOpenExternal.openUrl(app.androidInstallUrl, app.iosInstallUrl) }) {
-                    Text(
-                        "Install",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                    )
-                }
+                OutlinedAppButton(
+                    text = "Install",
+                    onClick = { appOpenExternal.openUrl(app.androidInstallUrl, app.iosInstallUrl) }
+                )
             }
-            TextButton(onClick = { onAppClicked(app) }) {
+            AdaptiveTextButton(onClick = { onAppClicked(app) }) {
                 Text(
                     "More info",
                     color = MaterialTheme.colorScheme.primary,

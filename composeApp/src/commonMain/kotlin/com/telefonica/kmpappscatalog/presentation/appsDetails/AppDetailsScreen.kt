@@ -23,7 +23,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -44,9 +43,10 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.telefonica.kmpappscatalog.AppInstallation
 import com.telefonica.kmpappscatalog.OpenExternal
 import com.telefonica.kmpappscatalog.domain.entities.LauncherApp
+import com.telefonica.kmpappscatalog.presentation.appsCatalog.component.AppButton
+import com.telefonica.kmpappscatalog.presentation.appsCatalog.component.OutlinedAppButton
 import com.telefonica.kmpappscatalog.presentation.appsDetails.model.AppsDetailsUiState
 import com.telefonica.kmpappscatalog.presentation.appsDetails.model.IsAppInstalled
-import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveButton
 import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveCircularProgressIndicator
 import io.github.alexzhirkevich.cupertino.adaptive.ExperimentalAdaptiveApi
 import io.kamel.image.KamelImage
@@ -208,7 +208,7 @@ fun BoxScope.Footer(
                 is IsAppInstalled.Loaded -> {
                     val installed = uiState.isAppInstalled.isInstalled
                     if (!installed) {
-                        ActionButton(
+                        OutlinedActionButton(
                             title = "Install",
                             buttonAction = { openExternal.openUrl(app.androidInstallUrl, app.iosInstallUrl) },
                         )
@@ -262,23 +262,19 @@ private fun CloseButton(back: () -> Unit, modifier: Modifier = Modifier) {
     }
 }
 
-@OptIn(ExperimentalAdaptiveApi::class)
 @Composable
 private fun ActionButton(
     title: String,
     buttonAction: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    AdaptiveButton(
+    AppButton(
+        text = title,
+        style = MaterialTheme.typography.labelLarge,
+        onClick = { buttonAction() },
         modifier = modifier
-            .fillMaxWidth(),
-        onClick = { buttonAction() }
-    ) {
-        Text(
-            title,
-            style = MaterialTheme.typography.labelLarge,
-        )
-    }
+            .fillMaxWidth()
+    )
 }
 
 @Composable
@@ -287,15 +283,11 @@ private fun OutlinedActionButton(
     buttonAction: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-
-    OutlinedButton(
+    OutlinedAppButton(
+        text = title,
+        style = MaterialTheme.typography.labelLarge,
+        onClick = { buttonAction() },
         modifier = modifier
-            .fillMaxWidth(),
-        onClick = { buttonAction() }
-    ) {
-        Text(
-            title,
-            style = MaterialTheme.typography.labelLarge,
-        )
-    }
+            .fillMaxWidth()
+    )
 }
