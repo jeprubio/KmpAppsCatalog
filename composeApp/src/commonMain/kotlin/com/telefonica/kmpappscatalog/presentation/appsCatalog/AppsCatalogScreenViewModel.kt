@@ -100,8 +100,8 @@ class AppsCatalogScreenViewModel : ScreenModel, KoinComponent {
                 isAppInstalledUseCase(app)
                     .collect { isInstalledResult ->
                         isInstalledResult.fold(
-                            onSuccess = { app.isInstalled = it },
-                            onFailure = { app.isInstalled = false }
+                            onSuccess = { app.isInstalled.value = it },
+                            onFailure = { app.isInstalled.value = false }
                         )
                     }
             }

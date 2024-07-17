@@ -190,6 +190,7 @@ fun ExtendedAppCard(
     modifier: Modifier = Modifier,
     appOpenExternal: OpenExternal = koinInject(),
 ) {
+    val isAppInstalled by app.isInstalled.collectAsState()
     AppCard(
         app = app,
         onAppClicked = null,
@@ -203,7 +204,7 @@ fun ExtendedAppCard(
         )
         Spacer(modifier = Modifier.height(8.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
-            if (app.isInstalled) {
+            if (isAppInstalled) {
                 AppButton(
                     text = "Open",
                     onClick = { appOpenExternal.openApp(app.androidPackage, app.iosScheme) }
