@@ -2,6 +2,7 @@ package com.telefonica.kmpappscatalog.domain.entities
 
 import cafe.adriel.voyager.core.lifecycle.JavaSerializable
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlin.jvm.Transient
 
 data class LauncherApp(
     val name: String,
@@ -14,5 +15,6 @@ data class LauncherApp(
     val androidPackage: String,
     val iosScheme: String,
 ): JavaSerializable {
+    @Transient
     val isInstalled: MutableStateFlow<Boolean> = MutableStateFlow(false)
 }
