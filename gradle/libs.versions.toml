@@ -14,7 +14,6 @@ compose-plugin = "1.6.11"
 cupertino = "0.1.0-alpha04"
 datastore = "1.1.1"
 junit = "4.13.2"
-kamel = "0.9.5"
 koin = "3.5.6"
 koin-compose = "1.1.5"
 kotestAssertionsCore = "5.9.0"
@@ -22,11 +21,11 @@ kotlin = "2.0.10"
 kotlinxCoroutinesCore = "1.8.1"
 kmmbridge = "0.5.7"
 ktorVersion = "2.3.12"
+landscapistCoil3 = "2.3.6"
 material3 = "1.6.11"
 napier = "2.7.1"
 skie = "0.8.4"
 voyager = "1.1.0-beta02"
-ksp = "2.0.0-1.0.21"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -48,6 +47,7 @@ ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktorVer
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktorVersion" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktorVersion" }
 ktor-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorVersion" }
+landscapist-coil3 = { module = "com.github.skydoves:landscapist-coil3", version.ref = "landscapistCoil3" }
 napier = { module = "io.github.aakira:napier", version.ref = "napier" }
 
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
@@ -57,7 +57,6 @@ koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin-compose"}
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 
-kamel = { group = "media.kamel", name = "kamel-image", version.ref = "kamel" }
 cupertino = { module = "io.github.alexzhirkevich:cupertino-adaptive", version.ref = "cupertino" }
 
 atomicfu = { group = "org.jetbrains.kotlinx", name = "atomicfu", version.ref = "atomicfu" }

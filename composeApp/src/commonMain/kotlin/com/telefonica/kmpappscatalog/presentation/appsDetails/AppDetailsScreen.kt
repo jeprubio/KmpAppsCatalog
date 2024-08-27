@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
@@ -40,6 +41,8 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.skydoves.landscapist.ImageOptions
+import com.skydoves.landscapist.coil3.CoilImage
 import com.telefonica.kmpappscatalog.AppInstallation
 import com.telefonica.kmpappscatalog.OpenExternal
 import com.telefonica.kmpappscatalog.domain.entities.LauncherApp
@@ -49,8 +52,6 @@ import com.telefonica.kmpappscatalog.presentation.appsDetails.model.AppsDetailsU
 import com.telefonica.kmpappscatalog.presentation.appsDetails.model.IsAppInstalled
 import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveCircularProgressIndicator
 import io.github.alexzhirkevich.cupertino.adaptive.ExperimentalAdaptiveApi
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
 import org.koin.compose.koinInject
 
 private const val HEADING_ASPECT_RATIO = 4f / 3f
@@ -121,9 +122,12 @@ private fun Heading(app: LauncherApp) {
             .fillMaxWidth()
             .aspectRatio(HEADING_ASPECT_RATIO)
     ) {
-        KamelImage(
-            resource = asyncPainterResource(data = app.icon),
-            contentDescription = app.name,
+        CoilImage(
+            imageModel = { app.icon },
+            imageOptions = ImageOptions(
+                contentScale = ContentScale.Crop,
+                alignment = Alignment.Center,
+            ),
             modifier = Modifier
                 .padding(bottom = 32.dp)
                 .fillMaxSize()
@@ -235,9 +239,8 @@ private fun BoxScope.AppIcon(
     app: LauncherApp,
     modifier: Modifier = Modifier
 ) {
-    KamelImage(
-        resource = asyncPainterResource(data = app.icon),
-        contentDescription = app.name,
+    CoilImage(
+        imageModel = { app.icon },
         modifier = modifier
             .align(Alignment.BottomStart)
             .clip(RoundedCornerShape(12.dp))

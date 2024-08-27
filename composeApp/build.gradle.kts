@@ -48,7 +48,7 @@ kotlin {
             implementation(libs.koin.compose)
 
             implementation(libs.napier)
-            implementation(libs.kamel)
+            implementation(libs.landscapist.coil3)
             implementation(libs.cupertino)
 
             implementation(libs.atomicfu)

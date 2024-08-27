@@ -40,6 +40,7 @@ import cafe.adriel.voyager.core.model.rememberNavigatorScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.skydoves.landscapist.coil3.CoilImage
 import com.telefonica.kmpappscatalog.OpenExternal
 import com.telefonica.kmpappscatalog.domain.entities.LauncherApp
 import com.telefonica.kmpappscatalog.domain.entities.LayoutType
@@ -54,8 +55,6 @@ import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveScaffold
 import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveTextButton
 import io.github.alexzhirkevich.cupertino.adaptive.AdaptiveTopAppBar
 import io.github.alexzhirkevich.cupertino.adaptive.ExperimentalAdaptiveApi
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
 import kmpappscatalog.composeapp.generated.resources.Res
 import kmpappscatalog.composeapp.generated.resources.ic_grid
 import kmpappscatalog.composeapp.generated.resources.ic_list
@@ -99,21 +98,7 @@ internal fun AppsCatalogScreen(
     ) { padding ->
         if (uiState.catalogDataState is CatalogDataState.Loaded) {
             Column(modifier = Modifier.padding(padding)) {
-                LazyRow(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
-                    items(uiState.catalogDataState.filters) { filter ->
-                        FilterChip(
-                            label = { Text(filter) },
-                            selected = filter == uiState.selectedFilter,
-                            modifier = Modifier.padding(end = 8.dp),
-                            colors = FilterChipDefaults.filterChipColors(
-                                selectedLabelColor = MaterialTheme.colorScheme.primary,
-                                selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                            ),
-                            shape = RoundedCornerShape(ROUNDED_CORNERS),
-                            onClick = { onFilterSelected(filter) },
-                        )
-                    }
-                }
+                Filters(uiState.catalogDataState, uiState, onFilterSelected)
                 if (uiState.uiLayoutType == Grid) {
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(2),
@@ -155,9 +140,32 @@ internal fun AppsCatalogScreen(
     }
 }
 
+@Composable
+private fun Filters(
+    catalogDataState: CatalogDataState.Loaded,
+    uiState: AppsCatalogUiState,
+    onFilterSelected: (String) -> Unit
+) {
+    LazyRow(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+        items(catalogDataState.filters) { filter ->
+            FilterChip(
+                label = { Text(filter) },
+                selected = filter == uiState.selectedFilter,
+                modifier = Modifier.padding(end = 8.dp),
+                colors = FilterChipDefaults.filterChipColors(
+                    selectedLabelColor = MaterialTheme.colorScheme.primary,
+                    selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                ),
+                shape = RoundedCornerShape(ROUNDED_CORNERS),
+                onClick = { onFilterSelected(filter) },
+            )
+        }
+    }
+}
+
 @OptIn(ExperimentalAdaptiveApi::class)
 @Composable
-fun AppCatalogToolbar(uiState: AppsCatalogUiState, onLayoutTypeSelected: (UILayoutType) -> Unit) {
+private fun AppCatalogToolbar(uiState: AppsCatalogUiState, onLayoutTypeSelected: (UILayoutType) -> Unit) {
     AdaptiveTopAppBar(
         title = { Text("Apps Catalog") },
         actions = {
@@ -184,7 +192,7 @@ fun AppCatalogToolbar(uiState: AppsCatalogUiState, onLayoutTypeSelected: (UILayo
 
 @OptIn(ExperimentalAdaptiveApi::class)
 @Composable
-fun ExtendedAppCard(
+private fun ExtendedAppCard(
     app: LauncherApp,
     onAppClicked: (LauncherApp) -> Unit,
     modifier: Modifier = Modifier,
@@ -249,9 +257,8 @@ private fun AppCard(
             ),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            KamelImage(
-                resource = asyncPainterResource(data = app.icon),
-                contentDescription = app.name,
+            CoilImage(
+                imageModel = { app.icon },
                 modifier = Modifier.size(40.dp).clip(RoundedCornerShape(8.dp)),
             )
             Spacer(modifier = Modifier.height(16.dp))
