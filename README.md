@@ -4,13 +4,11 @@ The app uses a different theme for android and iOS and some elements have a look
 
 Android:
 
-![androidCatalog](https://github.com/jeprubio/KmpAppsCatalog/assets/13270085/744f8143-227a-44ce-a830-685bb3cabe03)
-![androidDetails](https://github.com/jeprubio/KmpAppsCatalog/assets/13270085/8321ce0f-bdb2-4e4d-a8c9-2d5e0bb3b17d)
+<img src="screenshots/android-01-home.png" width="200" alt="Android Home" />  <img src="screenshots/android-02-home-list-filtered.png" width="200" alt="Android Home List Filtered" />  <img src="screenshots/android-03-details.png" width="200" alt="Android Details" />
 
 iOS:
 
-![iosCatalog](https://github.com/jeprubio/KmpAppsCatalog/assets/13270085/8b3e618c-c8ec-452c-91d6-029f71395340)
-![iosDetails](https://github.com/jeprubio/KmpAppsCatalog/assets/13270085/a4e02079-53eb-4d89-bff7-2cabd23e7cdb)
+<img src="screenshots/ios-01-home.png" width="200" alt="iOS Home" />  <img src="screenshots/ios-02-home-list-filtered.png" width="200" alt="iOS Home List Filtered" />  <img src="screenshots/ios-03-details.png" width="200" alt="iOS Details" />
 
 https://github.com/jeprubio/KmpAppsCatalog/assets/13270085/31977e2a-b2fa-4a1f-b9a0-7993834fcc9b
 
