@@ -10,7 +10,11 @@ iOS:
 
 <img src="screenshots/ios-01-home.png" width="200" alt="iOS Home" />  <img src="screenshots/ios-02-home-list-filtered.png" width="200" alt="iOS Home List Filtered" />  <img src="screenshots/ios-03-details.png" width="200" alt="iOS Details" />
 
-https://github.com/jeprubio/KmpAppsCatalog/assets/13270085/31977e2a-b2fa-4a1f-b9a0-7993834fcc9b
+Link to video:
+
+[![Video](https://img.youtube.com/vi/fJV5XNVvHzk/0.jpg)](https://www.youtube.com/watch?v=fJV5XNVvHzk)
+
+## Project structure
 
 * `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
   It contains several subfolders:
