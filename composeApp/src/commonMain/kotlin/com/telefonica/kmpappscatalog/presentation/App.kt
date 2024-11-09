@@ -1,10 +1,8 @@
 package com.telefonica.kmpappscatalog.presentation
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.Navigator
@@ -18,7 +16,7 @@ internal fun App(
     systemAppearance: (isLight: Boolean) -> Unit = {}
 ) {
     AppTheme(systemAppearance) {
-        Column(modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) {
+        Column(modifier = Modifier.fillMaxSize().safeDrawingPadding()) {
             Navigator(AppsCatalog()) {
                 SlideTransition(it, orientation = SlideOrientation.Vertical)
             }
