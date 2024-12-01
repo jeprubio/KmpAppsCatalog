@@ -8,12 +8,18 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -33,6 +39,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
@@ -102,17 +110,41 @@ private fun AppDetailsScreen(
         Footer(
             app = app,
             uiState = uiState,
-            modifier = Modifier.onSizeChanged { size ->
-                footerHeightDp = with(localDensity) { size.height.toDp() }
-            }
+            modifier = Modifier
+                .padding(WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom).asPaddingValues())
+                .onSizeChanged { size ->
+                    footerHeightDp = with(localDensity) { size.height.toDp() }
+                }
         )
+        StatusBarBackgroundGradient()
         CloseButton(
             back = back,
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(16.dp),
+                .padding(WindowInsets.safeDrawing.only(WindowInsetsSides.Top).asPaddingValues())
+                .padding(horizontal = 16.dp),
         )
     }
+}
+
+@Composable
+private fun StatusBarBackgroundGradient() {
+    val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+    Box(
+        modifier = Modifier.fillMaxWidth().height(statusBarHeight)
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        MaterialTheme.colorScheme.background,
+                        MaterialTheme.colorScheme.background,
+                        MaterialTheme.colorScheme.background.copy(alpha = 0.95f),
+                        MaterialTheme.colorScheme.background.copy(alpha = 0.90f),
+                        MaterialTheme.colorScheme.background.copy(alpha = 0.85f),
+                        Color.Transparent,
+                    ),
+                )
+            )
+    )
 }
 
 @Composable
@@ -214,17 +246,32 @@ fun BoxScope.Footer(
                     if (!installed) {
                         OutlinedActionButton(
                             title = "Install",
-                            buttonAction = { openExternal.openUrl(app.androidInstallUrl, app.iosInstallUrl) },
+                            buttonAction = {
+                                openExternal.openUrl(
+                                    app.androidInstallUrl,
+                                    app.iosInstallUrl
+                                )
+                            },
                         )
                     } else {
                         ActionButton(
                             title = "Open",
-                            buttonAction = { openExternal.openApp(app.androidPackage, app.iosScheme) },
+                            buttonAction = {
+                                openExternal.openApp(
+                                    app.androidPackage,
+                                    app.iosScheme
+                                )
+                            },
                         )
                         if (appInstallation.shouldShowUninstallButton()) {
                             OutlinedActionButton(
                                 title = "Uninstall",
-                                buttonAction = { appInstallation.uninstallApp(app.androidPackage, app.iosScheme) },
+                                buttonAction = {
+                                    appInstallation.uninstallApp(
+                                        app.androidPackage,
+                                        app.iosScheme
+                                    )
+                                },
                             )
                         }
                     }
@@ -265,6 +312,7 @@ private fun CloseButton(back: () -> Unit, modifier: Modifier = Modifier) {
     }
 }
 
+@OptIn(ExperimentalAdaptiveApi::class)
 @Composable
 private fun ActionButton(
     title: String,

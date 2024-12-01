@@ -2,7 +2,6 @@ package com.telefonica.kmpappscatalog.presentation
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.Navigator
@@ -16,7 +15,7 @@ internal fun App(
     systemAppearance: (isLight: Boolean) -> Unit = {}
 ) {
     AppTheme(systemAppearance) {
-        Column(modifier = Modifier.fillMaxSize().safeDrawingPadding()) {
+        Column(modifier = Modifier.fillMaxSize()) {
             Navigator(AppsCatalog()) {
                 SlideTransition(it, orientation = SlideOrientation.Vertical)
             }
