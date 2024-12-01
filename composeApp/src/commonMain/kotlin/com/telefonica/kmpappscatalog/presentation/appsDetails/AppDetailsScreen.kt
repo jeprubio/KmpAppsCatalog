@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
@@ -29,12 +28,12 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -42,8 +41,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
@@ -88,42 +85,39 @@ private fun AppDetailsScreen(
     uiState: AppsDetailsUiState,
     back: () -> Unit,
 ) {
-    var footerHeightDp = remember { 0.dp }
-    val localDensity = LocalDensity.current
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            item {
-                Heading(app)
-            }
-            item {
-                Body(app, uiState)
-            }
-            item {
-                Spacer(
-                    modifier = Modifier.height(footerHeightDp)
-                )
-            }
+    Scaffold(
+        bottomBar = {
+            Footer(
+                app = app,
+                uiState = uiState,
+                modifier = Modifier
+                    .padding(
+                        WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom).asPaddingValues()
+                    )
+            )
         }
-        Footer(
-            app = app,
-            uiState = uiState,
+    ) {
+        Box(
             modifier = Modifier
-                .padding(WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom).asPaddingValues())
-                .onSizeChanged { size ->
-                    footerHeightDp = with(localDensity) { size.height.toDp() }
+                .fillMaxSize()
+        ) {
+            LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                item {
+                    Heading(app)
                 }
-        )
-        StatusBarBackgroundGradient()
-        CloseButton(
-            back = back,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(WindowInsets.safeDrawing.only(WindowInsetsSides.Top).asPaddingValues())
-                .padding(horizontal = 16.dp),
-        )
+                item {
+                    Body(app, uiState)
+                }
+            }
+            StatusBarBackgroundGradient()
+            CloseButton(
+                back = back,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(WindowInsets.safeDrawing.only(WindowInsetsSides.Top).asPaddingValues())
+                    .padding(horizontal = 16.dp),
+            )
+        }
     }
 }
 
@@ -208,7 +202,7 @@ fun Body(
 
 @OptIn(ExperimentalAdaptiveApi::class)
 @Composable
-fun BoxScope.Footer(
+fun Footer(
     app: LauncherApp,
     uiState: AppsDetailsUiState,
     modifier: Modifier = Modifier,
@@ -217,7 +211,6 @@ fun BoxScope.Footer(
     val appInstallation = koinInject<AppInstallation>()
     Column(
         modifier = modifier
-            .align(Alignment.BottomCenter)
             .background(MaterialTheme.colorScheme.surface)
     ) {
         HorizontalDivider(
