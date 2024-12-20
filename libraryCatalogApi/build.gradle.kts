@@ -92,3 +92,9 @@ kmmbridge {
     mavenPublishArtifacts()
     spm()
 }
+
+skie {
+    build {
+        produceDistributableFramework()
+    }
+}
