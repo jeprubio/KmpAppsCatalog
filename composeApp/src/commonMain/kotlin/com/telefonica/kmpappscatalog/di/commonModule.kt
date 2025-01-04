@@ -7,13 +7,14 @@ import com.telefonica.kmpappscatalog.domain.usecase.GetLauncherAppsUseCase
 import com.telefonica.kmpappscatalog.domain.usecase.GetLayoutTypeUseCase
 import com.telefonica.kmpappscatalog.domain.usecase.IsAppInstalledUseCase
 import com.telefonica.kmpappscatalog.domain.usecase.SaveLayoutTypeUseCase
+import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
 fun commonModule() = module {
-    factory { LauncherAppsRepo(get()) }
+    factoryOf(::LauncherAppsRepo)
     factory<DataStoreRepository> { DefaultDataStoreRepository(get()) }
-    factory { GetLauncherAppsUseCase(get()) }
-    factory { IsAppInstalledUseCase(get()) }
-    factory { SaveLayoutTypeUseCase(get()) }
-    factory { GetLayoutTypeUseCase(get()) }
+    factoryOf(::GetLauncherAppsUseCase)
+    factoryOf(::IsAppInstalledUseCase)
+    factoryOf(::SaveLayoutTypeUseCase)
+    factoryOf(::GetLayoutTypeUseCase)
 }
