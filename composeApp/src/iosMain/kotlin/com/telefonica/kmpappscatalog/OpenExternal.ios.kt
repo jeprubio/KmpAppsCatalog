@@ -6,10 +6,10 @@ import platform.UIKit.UIApplication
 actual class OpenExternal {
     actual fun openUrl(androidUrl: String?, iosUrl: String?) {
         val nsUrl = iosUrl?.let { NSURL.URLWithString(it) } ?: return
-        if (UIApplication.sharedApplication.canOpenURL(nsUrl)) {
-            UIApplication.sharedApplication.openURL(nsUrl)
-        } else {
-            println("Cannot open URL: $iosUrl")
+        UIApplication.sharedApplication.openURL(nsUrl, options = emptyMap<Any?, Any?>()) { success ->
+            if (!success) {
+                println("Cannot open URL: $iosUrl")
+            }
         }
     }
 
@@ -17,7 +17,11 @@ actual class OpenExternal {
         when {
             iosScheme != null -> {
                 NSURL.URLWithString(iosScheme)?.let {
-                    UIApplication.sharedApplication.openURL(it)
+                    UIApplication.sharedApplication.openURL(it, options = emptyMap<Any?, Any?>()) { success ->
+                        if (!success) {
+                            println("Cannot open app with scheme: $iosScheme")
+                        }
+                    }
                 }
             }
         }
