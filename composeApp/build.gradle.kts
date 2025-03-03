@@ -1,3 +1,6 @@
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.compose.reload.ComposeHotRun
+import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -5,6 +8,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.hotReload)
 }
 
 kotlin {
@@ -24,8 +28,12 @@ kotlin {
             isStatic = true
         }
     }
+
+    jvm("desktop")
     
     sourceSets {
+        val desktopMain by getting
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -51,6 +59,10 @@ kotlin {
 
             implementation(libs.atomicfu)
             implementation(libs.datastore.preferences)
+        }
+        desktopMain.dependencies {
+            implementation(compose.desktop.currentOs)
+            implementation(libs.kotlinx.coroutines.swing)
         }
     }
 }
@@ -92,3 +104,24 @@ android {
         debugImplementation(compose.uiTooling)
     }
 }
+
+compose.desktop {
+    application {
+        mainClass = "com.telefonica.kmpappscatalog.MainKt"
+
+        nativeDistributions {
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            packageName = "com.telefonica.kmpappscatalog"
+            packageVersion = "1.0.0"
+        }
+    }
+}
+
+composeCompiler {
+    featureFlags.add(ComposeFeatureFlag.OptimizeNonSkippingGroups)
+}
+
+tasks.register<ComposeHotRun>("runHotReload") {
+    mainClass.set("com.telefonica.kmpappscatalog.MainKt")
+}
+

@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.serialization)
     id("maven-publish")
     alias(libs.plugins.kmmBridge)
-    alias(libs.plugins.skie)
+    //alias(libs.plugins.skie)
 }
 
 group = "com.rumosoft.catalogapi"
@@ -34,8 +34,12 @@ kotlin {
             isStatic = true
         }
     }
+
+    jvm("desktop")
     
     sourceSets {
+        val desktopMain by getting
+
         commonMain.dependencies {
             implementation(libs.ktor.client.core)
             implementation(libs.kotlinx.coroutines.core)
@@ -54,6 +58,9 @@ kotlin {
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
+        }
+        desktopMain.dependencies {
+            implementation(libs.kotlinx.coroutines.swing)
         }
     }
 }
@@ -93,8 +100,10 @@ kmmbridge {
     spm()
 }
 
+/*
 skie {
     build {
         produceDistributableFramework()
     }
 }
+*/
